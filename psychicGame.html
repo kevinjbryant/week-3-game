@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>The Psychic Game</title>
+</head>
+<body>
+
+
+<h1>The Psychic Game</h1>
+
+<p>Im thinking of a letter. Can you guess it?</p>
+
+
+<p>Wins: <span id="wins">0</span></p>
+
+<p>Losses: <span id="losses">0</span></p>
+
+<p>Guesses Left: <span id="guessesLeft"></span></p>
+
+<p>Your Guesses so far: <span id="guessesSoFar"></span></p>
+	
+<!--Javascript for HTML logic -->
+<script type="text/javascript">	
+
+	//create a list of three options for the letters
+	//pass guessed letter through array
+	//give ten guesses
+	//tally win/loss
+	var letters = ['y', 'b', 'k'];
+	var guessedLetters = [];
+	var letterToGuess = null;
+	var totalGuesses = 9;
+	var guessesLeft = 9;
+	var wins = 0;
+	var losses = 0;
+
+
+	
+	//make letter to guess a random choice 
+	var updateLetterToGuess = function(){
+		this.letterToGuess = this.letters[Math.floor(Math.random() * this.letters.length)];
+	};
+
+	//show what guesses have already been made
+	var updateGuessesSoFar = function(){
+		document.querySelector('#guessesSoFar').innerHTML = guessedLetters.join(', ');
+	};
+
+
+	// update guesses left variable
+	var updateGuessesLeft = function(){
+		document.querySelector('#guessesLeft').innerHTML = guessesLeft;
+	};
+	// reset everything to starting numbers and pass in other functions with update
+	var reset = function(){
+		totalGuesses = 9;
+		guessesLeft = 9;
+		guessedLetters = [];
+		updateLetterToGuess();
+		updateGuessesLeft();
+		updateGuessesSoFar();
+	}
+	
+	updateLetterToGuess(); //execute on page load
+	updateGuessesLeft();
+
+	// This function will capture the keyboard clicks. 
+	document.onkeyup = function(event) {
+		guessesLeft--;
+
+		// make letter lower case
+		var letter = String.fromCharCode(event.keyCode).toLowerCase();
+		guessedLetters.push(letter);
+
+		updateGuessesLeft();
+		updateGuessesSoFar();
+
+		//if guesses left is more than 0 check for match increase wins/loss resetgame
+		if (guessesLeft > 0){
+			if (letter == letterToGuess){
+				wins++;
+				document.querySelector('#wins').innerHTML = wins;
+				reset();
+			}
+		}else if(guessesLeft == 0){
+			losses++;
+			document.querySelector('#losses').innerHTML = losses;
+			reset();
+		}
+	};
+</script>
+</body>
+</html>
